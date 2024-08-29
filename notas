@@ -1,0 +1,10 @@
+1 - Tornar o processo de scraping e insercao de dados na database mais eficientes fundindo-os em um so processo
+2 - Aumentar a velocidade de insercao de dados na database
+3 - Nao excluir e preencher toda a base de dados novamente, apenas trocar os dados que foram alterados ou adicionados, assim ganhando
+eficiencia e evitando a possivel perda de todos os dados armazenados numa possivel perda da API principal
+4 - Conseguir criar um middleware que intermedia todas as requisicoes e nao responde as selecionadas quando o processo de update
+do banco de dados ta funcionand(por enquanto consegui apenas criar um estado e por ele nos endpoints que quero que nao respondam
+e seleciono a resposta que eles vao dar nesse caso, mas quero que eles fiquem inacessiveis enquanto o update esta acontecendo, sem que
+eu precise selecionar 1 por 1
+5 - Fazer os endpoints de buscas baseado na ideia do que sedra o frontend.
+6 - Iniciar o frontend
