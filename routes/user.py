@@ -1,5 +1,4 @@
 from fastapi import HTTPException, Depends, status, Request, BackgroundTasks
-
 from fastapi import APIRouter
 import jwt
 from prisma.errors import UniqueViolationError
@@ -8,13 +7,12 @@ from models.user import User
 from utils.encrypt_pass import encrypt_password, check_password
 from fastapi.security import OAuth2PasswordRequestForm
 from utils.access_token import create_access_token, validate_token
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from utils.updatedb import update_database
-from state import is_updating_database
+
 router = APIRouter(prefix = '/user')
 
 @router.post('/register')
-
 async def register(user: User):
     try:
         user.password = encrypt_password(user.password)
@@ -24,8 +22,8 @@ async def register(user: User):
     except Exception as e:
         raise HTTPException(status_code = 500, detail = 'Internal server error')
     return {'message': 'User registered'}
-@router.post('/login')
 
+@router.post('/login')
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await prisma.user.find_first(where = {'email': form_data.username})
     if not user:
@@ -36,7 +34,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post('/delete_user')
-
 async def delete_user(request: Request):
     token = validate_token(request.headers)
     print(token)
@@ -47,7 +44,6 @@ async def delete_user(request: Request):
     return {'message': 'User deleted'}
 
 @router.get('/get_user_data')
-
 async def get_user_data(request: Request):
     token = validate_token(request.headers)
     if not token:
@@ -56,9 +52,7 @@ async def get_user_data(request: Request):
     user = await prisma.user.find_first(where = {'id': user_id})
     return {'name': user.name, 'email': user.email}
 
-
 @router.post('/update_user')
-
 async def update_user(request: Request):
     token = validate_token(request.headers)
     if not token:
@@ -84,25 +78,14 @@ async def update_user(request: Request):
 
     return {'message': 'User updated'}
 
-
-
 @router.post('/reset_and_update_database')
 async def reset_and_update_database(request: Request, background_tasks: BackgroundTasks):
-    global is_updating_database
-    is_updating_database = True
-    print(is_updating_database)
-
     async def update_and_reset():
-        try:
-            await update_database()
-        finally:
-            global is_updating_database
-            is_updating_database = False
+        await update_database(request)
 
     background_tasks.add_task(update_and_reset)
     return {'message': 'Database reset and update started'}
 
 @router.get('/is_updating_database')
-async def get_is_updating_database():
-    global is_updating_database
-    return {'is_updating_database': is_updating_database}
+async def get_is_updating_database(request: Request):
+    return {'is_updating_database': request.app.state.is_updating_database}

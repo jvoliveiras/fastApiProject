@@ -1,1 +1,0 @@
-is_updating_database = False
