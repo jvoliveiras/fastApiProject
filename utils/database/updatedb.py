@@ -1,4 +1,4 @@
-from utils.cleardb import clear_database
+from utils.database.cleardb import clear_database
 from utils.scrap.populateDatabase import get_and_populate_establishments
 
 async def update_database(request):

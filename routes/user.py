@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Depends, status, Request, BackgroundTasks
+from fastapi import HTTPException, Depends, Request, BackgroundTasks
 from fastapi import APIRouter
 import jwt
 from prisma.errors import UniqueViolationError
@@ -7,8 +7,8 @@ from models.user import User
 from utils.encrypt_pass import encrypt_password, check_password
 from fastapi.security import OAuth2PasswordRequestForm
 from utils.access_token import create_access_token, validate_token
-from datetime import datetime, timedelta
-from utils.updatedb import update_database
+from datetime import timedelta
+from utils.database.updatedb import update_database
 
 router = APIRouter(prefix = '/user')
 

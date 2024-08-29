@@ -5,7 +5,7 @@ from uvicorn import Config, Server
 from prismadb import connect_prisma
 from routes.user import router as user_router
 from routes.estabelecimentos import router as estabelecimentos_router
-from block_endpoints import BlockEndpointsMiddleware
+from utils.endpoints.block_endpoints import BlockEndpointsMiddleware
 
 loop = asyncio.new_event_loop()
 loop.run_until_complete(connect_prisma())
