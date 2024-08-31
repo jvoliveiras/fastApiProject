@@ -89,3 +89,30 @@ async def reset_and_update_database(request: Request, background_tasks: Backgrou
 @router.get('/is_updating_database')
 async def get_is_updating_database(request: Request):
     return {'is_updating_database': request.app.state.is_updating_database}
+
+@router.post('/validate_access_token')
+async def validate_token_endpoint(request: Request):
+    try:
+        # Utilize o validate_token corretamente
+        token = validate_token(request.headers)
+        if not token:
+            raise HTTPException(status_code=401, detail='Invalid token')
+
+        # Decodifica o token JWT
+        payload = jwt.decode(token, "secret_key", algorithms=['HS256'])
+        user_id = payload['sub']
+
+        # Procura o usuário no banco de dados
+        user = await prisma.user.find_first(where={'id': user_id})
+
+        if not user:
+            raise HTTPException(status_code=401, detail='User not found')
+
+        # Retorna o usuário ou uma confirmação de que o token é válido
+        return {"message": "Valid token"}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail='Expired token')
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail='Invalid token')
+
