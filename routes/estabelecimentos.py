@@ -34,7 +34,6 @@ async def get_establishments(request: Request):
         if not estabelecimentos:
             raise HTTPException(status_code=404, detail="Nenhum estabelecimento encontrado")
 
-        # Filtrar os campos desejados e retornar apenas os necessários
         resultado: List[Dict[str, Any]] = []
         for estabelecimento in estabelecimentos:
             resultado.append({
@@ -59,3 +58,9 @@ async def get_establishments(request: Request):
 
     finally:
         await prisma.disconnect()
+
+@router.post("/new_get_establishments")
+async def new_get_establishments(request:Request):
+    search_params: Dict[str, Any] = await request.json()
+
+    pass
