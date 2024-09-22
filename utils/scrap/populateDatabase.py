@@ -87,3 +87,5 @@ async def get_and_populate_establishments():
                 print(f"Failed to fetch data for state {state} and unit {unit}: {e}")
 
     await prisma.disconnect()
+
+# asyncio.run(get_and_populate_establishments())

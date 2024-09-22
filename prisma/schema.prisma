@@ -6,7 +6,7 @@ generator client {
 
 datasource db{
   provider = "postgresql"
-  url = "postgres://postgres:1234@localhost:5432/saudedb"
+  url = "postgres://postgres:root@localhost:5432/saudedb"
 }
 model User{
   id String @id @default(uuid())
