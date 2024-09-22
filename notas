@@ -1,0 +1,9 @@
+1 - Tornar o processo de scraping e insercao de dados na database mais eficientes fundindo-os em um so processo
+2 - Aumentar a velocidade de insercao de dados na database
+5 - Update na funcao populatedatabase quando der update para excluir os dados que nao estao mais presentes no scraping
+6 - Fazer os endpoints de buscas baseado na ideia do que sedra o frontend.
+7 - Iniciar o frontend com a pagina de login e registro e setar o token no localstorage para que ele possa ser usado nas requisicoes e validar algumas
+8 - Criar a pagina de busca de estabelecimentos de saude
+
+
+
