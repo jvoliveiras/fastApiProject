@@ -76,20 +76,25 @@ async def search_by_cep(cep_request: CepRequest):
         ceps_proximos = find_ceps_within_distance(reference_cep, api_key, max_distance_km)
 
         if not ceps_proximos:
-            raise HTTPException(status_code=404, detail="Nenhum CEP encontrado dentro da distância especificada.")
+            raise HTTPException(status_code=404, detail="Nenhum CEP/Estabelecimento encontrado dentro da distância especificada.")
 
         await prisma.connect()
 
-        estabelecimentos = await prisma.estabelecimento.find_many(
-            where={
-                'codigo_cep_estabelecimento': {
-                    'in': ceps_proximos
-                }
+        filtro_where = {
+            'codigo_cep_estabelecimento': {
+                'in': ceps_proximos
             }
+        }
+
+        if cep_request.tipo_estabelecimento != "Todos":
+            filtro_where['codigo_tipo_unidade'] = int(cep_request.tipo_estabelecimento)
+
+        estabelecimentos = await prisma.estabelecimento.find_many(
+            where=filtro_where
         )
 
         if not estabelecimentos:
-            raise HTTPException(status_code=404, detail="Nenhum estabelecimento encontrado para os CEPs próximos.")
+            raise HTTPException(status_code=404, detail="Nenhum estabelecimento encontrado para os ceps próximos!.")
 
         resultado: List[Dict[str, Any]] = []
         for estabelecimento in estabelecimentos:
